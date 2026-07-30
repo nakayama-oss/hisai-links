@@ -245,6 +245,7 @@ body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;margin:0;col
 </details>
 <footer><b>本サイトについて</b><br>本サイトは、被災者支援の相談対応に役立てるため弁護士が任意に作成した情報リンク集であり、<b>行政機関の公式サイトではありません</b>。各制度の内容・受付状況は、必ずリンク先の公式ページ・各自治体の窓口等でご確認ください。<br>本リンク集は作成時点の情報・制度に基づくもので、受けられる支援の全てを網羅するものではありません。受付終了・申請期限等は変わることがあります。掲載内容の正確性には努めていますが、その内容によって生じた損害について運営者は責任を負いかねます。<br>運営：弁護士 中山泰誠</footer>
 <a class=top data-j="pagetop" href="#pagetop">▲ 上へ</a>
+<script>window.MUNI=["あしきた", "あしきたまち", "あまくさ", "あまくさし", "うえあまくさ", "うえあまくさし", "うき", "うきし", "うと", "うとし", "おおづ", "おおづまち", "かしま", "かしままち", "きくち", "きくちし", "きくよう", "きくようまち", "くまもと", "くまもとし", "こうさ", "こうさまち", "こうし", "こうしし", "つなぎ", "つなぎまち", "にしはら", "にしはらむら", "ひかわ", "ひかわまち", "ましき", "ましきまち", "みさと", "みさとまち", "みなまた", "みなまたし", "みふね", "みふねまち", "やつしろ", "やつしろし", "やまが", "やまがし", "上天草", "上天草市", "八代", "八代市", "合志", "合志市", "嘉島", "嘉島町", "大津", "大津町", "天草", "天草市", "宇土", "宇土市", "宇城", "宇城市", "山鹿", "山鹿市", "御船", "御船町", "水俣", "水俣市", "氷川", "氷川町", "津奈木", "津奈木町", "熊本", "熊本市", "甲佐", "甲佐町", "益城", "益城町", "美里", "美里町", "芦北", "芦北町", "菊池", "菊池市", "菊陽", "菊陽町", "西原", "西原村"];</script>
 <script>
 function openTo(id){var el=document.getElementById(id);if(!el)return;var p=el.closest("details");while(p){p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"start"})},60)}
 document.addEventListener("click",function(e){var a=e.target.closest("a[data-j]");if(a){e.preventDefault();openTo(a.getAttribute("data-j"))}});
@@ -253,10 +254,13 @@ function terms(v){return v.replace(/　/g," ").split(/\s+/).filter(function(t){r
 function toHira(s){return s.replace(/[ァ-ヶ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-96)})}
 function matchAll(s,ts){for(var i=0;i<ts.length;i++){if(s.indexOf(ts[i])<0)return false}return true}
 function matchAll2(s,y,ts){for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);if(s.indexOf(t)<0&&s.indexOf(h)<0&&(y||"").indexOf(h)<0)return false}return true}
+var MUNI=window.MUNI||[];
+function isMuni(t){var h=toHira(t);for(var i=0;i<MUNI.length;i++){var m=MUNI[i];if(m.indexOf(t)>=0||m.indexOf(h)>=0)return true}return false}
+function matchCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",p2=c.id.indexOf("p2_")===0,ho=false;for(var k=0;k<ts.length;k++){if(!isMuni(ts[k])){ho=true;break}}for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);var hit=s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0;if(!hit){if(p2&&ho&&isMuni(t))continue;return false}}return true}
 q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=terms(v);var cards=document.querySelectorAll(".card");var n=0;
 if(!ts.length){cards.forEach(function(c){c.style.display=""});document.querySelectorAll(".sub").forEach(function(s){s.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=false});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";return}
 home.style.display="none";
-cards.forEach(function(c){var hit=matchAll2(c.getAttribute("data-s")||"",c.getAttribute("data-y")||"",ts);c.style.display=hit?"":"none";if(hit)n++});
+cards.forEach(function(c){var hit=matchCard(c,ts);c.style.display=hit?"":"none";if(hit)n++});
 document.querySelectorAll(".sub").forEach(function(s){var vis=false,el=s.nextElementSibling;while(el&&!el.classList.contains("sub")){if(el.classList.contains("card")&&el.style.display!=="none"){vis=true;break}el=el.nextElementSibling}s.style.display=vis?"":"none"});
 document.querySelectorAll("details").forEach(function(d){var sum=d.querySelector("summary");var cityhit=sum&&sum.classList.contains("o")&&matchAll2((sum.textContent||"").toLowerCase(),sum.getAttribute("data-y")||"",ts);
 if(d.classList.contains("none")){d.style.display="none";return}
