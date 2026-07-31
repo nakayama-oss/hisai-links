@@ -329,6 +329,12 @@ if(cityhit){d.style.display="";d.open=true;d.querySelectorAll(".card").forEach(f
 else{var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}}});
 document.querySelectorAll(".lbl").forEach(function(l){l.style.display="none"});
 if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
-else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}});
+else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}if(window.__logSearch)window.__logSearch(v,n);});
+</script>
+<script>
+(function(){var qi=document.getElementById("q");if(!qi)return;var t=null;
+window.__logSearch=function(query,n){if(!query||query.length<2)return;if(t)clearTimeout(t);
+t=setTimeout(function(){if(query!==(qi.value.trim().toLowerCase()))return;if(!window.goatcounter||!window.goatcounter.count)return;var qq=query.slice(0,60);
+window.goatcounter.count({path:"q/"+qq,title:"search "+n,event:true});if(n===0){window.goatcounter.count({path:"q0/"+qq,title:"0hit",event:true});}},1500);};})();
 </script>
 </div></body></html>
