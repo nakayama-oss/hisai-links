@@ -451,10 +451,12 @@ function terms(v){return v.replace(/　/g," ").split(/\s+/).filter(function(t){r
 function toHira(s){return s.replace(/[ァ-ヶ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-96)})}
 function matchAll(s,ts){for(var i=0;i<ts.length;i++){if(s.indexOf(ts[i])<0)return false}return true}
 function matchAll2(s,y,ts){for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);if(s.indexOf(t)<0&&s.indexOf(h)<0&&(y||"").indexOf(h)<0)return false}return true}
-var MUNI=window.MUNI||[];
+var MUNI=window.MUNI||[];var MUNISET={};for(var _mi=0;_mi<MUNI.length;_mi++)MUNISET[MUNI[_mi]]=1;
+function splitMuni(t){if(MUNISET[t])return [t];var best=null,bi=-1;for(var i=0;i<MUNI.length;i++){var m=MUNI[i];if(m.length<t.length&&(t.length-m.length)>=2){var idx=t.indexOf(m);if(idx>=0&&(best===null||m.length>best.length)){best=m;bi=idx;}}}if(best===null)return [t];var res=[],bf=t.slice(0,bi),af=t.slice(bi+best.length);splitMuni(bf).forEach(function(x){if(x)res.push(x)});res.push(best);splitMuni(af).forEach(function(x){if(x)res.push(x)});return res;}
+function expandTerms(ts){var out=[];for(var i=0;i<ts.length;i++){var p=splitMuni(ts[i]);for(var j=0;j<p.length;j++)if(p[j])out.push(p[j])}return out;}
 function isMuni(t){var h=toHira(t);for(var i=0;i<MUNI.length;i++){var m=MUNI[i];if(m.indexOf(t)>=0||m.indexOf(h)>=0)return true}return false}
 function matchCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",p2=c.id.indexOf("p2_")===0,ho=false;for(var k=0;k<ts.length;k++){if(!isMuni(ts[k])){ho=true;break}}for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);var hit=s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0;if(!hit){if(p2&&ho&&isMuni(t))continue;return false}}return true}
-q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=terms(v);var cards=document.querySelectorAll(".card");var n=0;
+q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=expandTerms(terms(v));var cards=document.querySelectorAll(".card");var n=0;
 if(!ts.length){cards.forEach(function(c){c.style.display=""});document.querySelectorAll(".sub").forEach(function(s){s.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=false});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";return}
 home.style.display="none";
 cards.forEach(function(c){var hit=matchCard(c,ts);c.style.display=hit?"":"none";if(hit)n++});
