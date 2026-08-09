@@ -582,7 +582,7 @@ function isMuni(t){var h=toHira(t);for(var i=0;i<MUNI.length;i++){var m=MUNI[i];
 function relaxTerms(ts,cards){
 // 文で入力されたときの救済：語を機械的に切らず、「集の中に実在する最長の部分文字列」を貪欲に拾う。
 var idx=[];cards.forEach(function(c){idx.push((c.getAttribute("data-s")||"")+""+(c.getAttribute("data-y")||""))});
-function exists(t){var h=toHira(t);for(var i=0;i<idx.length;i++){if(idx[i].indexOf(t)>=0||idx[i].indexOf(h)>=0)return true}return false}
+function df(t){var h=toHira(t),n=0;for(var i=0;i<idx.length;i++){if(idx[i].indexOf(t)>=0||idx[i].indexOf(h)>=0)n++}return n}
 var res=[];
 for(var k=0;k<ts.length;k++){
  var v=ts[k];if(!v)continue;
@@ -593,12 +593,18 @@ for(var k=0;k<ts.length;k++){
    if(!free)continue;
    var sub=v.slice(i,i+L);
    if(/^[のがをにはでとへもやかねよ、。,\.\?？!！・「」（）()\[\] ]+$/.test(sub))continue;
-   if(exists(sub)){res.push(sub);for(var j2=i;j2<i+L;j2++)used[j2]=1}
+   var d=df(sub);
+   if(d>0){res.push([sub,d]);for(var j2=i;j2<i+L;j2++)used[j2]=1}
   }
  }
 }
-var seen={},out=[];for(var m=0;m<res.length;m++){if(res[m].length<2)continue;if(seen[res[m]])continue;seen[res[m]]=1;out.push(res[m])}
+var lim=Math.max(1,Math.floor(idx.length*0.25));
+var keep=res.filter(function(x){return x[1]<=lim});
+if(!keep.length&&res.length){res.sort(function(a,b){return a[1]-b[1]});keep=[res[0]]}
+var seen={},out=[];for(var m=0;m<keep.length;m++){var t=keep[m][0];if(t.length<2||seen[t])continue;seen[t]=1;out.push(t)}
 return out}
+function scoreCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",n=0;
+for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);if(s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0)n++}return n}
 function matchCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",p2=c.id.indexOf("p2_")===0,ho=false;for(var k=0;k<ts.length;k++){if(!isMuni(ts[k])){ho=true;break}}for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);var hit=s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0;if(!hit){if(p2&&ho&&isMuni(t))continue;return false}}return true}
 q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=expandTerms(terms(v));var cards=document.querySelectorAll(".card");var n=0;
 if(!ts.length){cards.forEach(function(c){c.style.display=""});document.querySelectorAll(".sub").forEach(function(s){s.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=false});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";return}
@@ -610,7 +616,8 @@ if(d.classList.contains("none")){d.style.display="none";return}
 if(cityhit){d.style.display="";d.open=true;d.querySelectorAll(".card").forEach(function(c){if(c.style.display==="none"){c.style.display="";n++}})}
 else{var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}}});
 document.querySelectorAll(".lbl").forEach(function(l){l.style.display="none"});
-if(n===0){var ts2=relaxTerms(ts,cards);if(ts2.length&&ts2.join("")!==ts.join("")){cards.forEach(function(c){var hit=matchCard(c,ts2);c.style.display=hit?"":"none";if(hit)n++});document.querySelectorAll(".sub").forEach(function(s){var vis=false,el=s.nextElementSibling;while(el&&!el.classList.contains("sub")){if(el.classList.contains("card")&&el.style.display!=="none"){vis=true;break}el=el.nextElementSibling}s.style.display=vis?"":"none"});document.querySelectorAll("details").forEach(function(d){if(d.classList.contains("none")){d.style.display="none";return}var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}});if(n>0){nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」ではヒットしなかったため、【"+ts2.join(" ")+"】で検索しました："+n+"件";}}}if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
+if(n===0){var ts2=relaxTerms(ts,cards);if(ts2.length){var best=0;cards.forEach(function(c){var sc=scoreCard(c,ts2);if(sc>best)best=sc});if(best>0){cards.forEach(function(c){var hit=scoreCard(c,ts2)===best;c.style.display=hit?"":"none";if(hit)n++});document.querySelectorAll(".sub").forEach(function(s){var vis=false,el=s.nextElementSibling;while(el&&!el.classList.contains("sub")){if(el.classList.contains("card")&&el.style.display!=="none"){vis=true;break}el=el.nextElementSibling}s.style.display=vis?"":"none"});document.querySelectorAll("details").forEach(function(d){if(d.classList.contains("none")){d.style.display="none";return}var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}});if(n>0){nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」では見つからなかったため、【"+ts2.slice(0,4).join(" ／ ")+"】で探しました："+n+"件";}}}}
+if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
 else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}if(window.__logSearch)window.__logSearch(v,n);});
 </script>
 <script>
