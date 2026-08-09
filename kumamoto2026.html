@@ -579,6 +579,13 @@ var MUNI=window.MUNI||[];var MUNISET={};for(var _mi=0;_mi<MUNI.length;_mi++)MUNI
 function splitMuni(t){if(MUNISET[t])return [t];var best=null,bi=-1;for(var i=0;i<MUNI.length;i++){var m=MUNI[i];if(m.length<t.length&&(t.length-m.length)>=2){var idx=t.indexOf(m);if(idx>=0&&(best===null||m.length>best.length)){best=m;bi=idx;}}}if(best===null)return [t];var res=[],bf=t.slice(0,bi),af=t.slice(bi+best.length);splitMuni(bf).forEach(function(x){if(x)res.push(x)});res.push(best);splitMuni(af).forEach(function(x){if(x)res.push(x)});return res;}
 function expandTerms(ts){var out=[];for(var i=0;i<ts.length;i++){var p=splitMuni(ts[i]);for(var j=0;j<p.length;j++)if(p[j])out.push(p[j])}return out;}
 function isMuni(t){var h=toHira(t);for(var i=0;i<MUNI.length;i++){var m=MUNI[i];if(m.indexOf(t)>=0||m.indexOf(h)>=0)return true}return false}
+function relaxTerms(ts){var STOP={"の":1,"が":1,"を":1,"に":1,"は":1,"で":1,"と":1,"へ":1,"も":1,"や":1,"か":1,"ね":1,"よ":1,"て":1,"た":1,"だ":1,"です":1,"ます":1,"した":1,"して":1,"ない":1,"なり":1,"こと":1,"もの":1,"とき":1,"場合":1,"について":1,"教えて":1,"どう":1,"どこ":1,"いつ":1};
+var SEP=/[のがをにはでとへもや、。,\.\?？!！・「」（）()\[\]]+|について|における|に関する|したい| したら|できない|できる|ください|教えて|どうすれば|どうしたら/;
+var out=[],seen={};
+for(var i=0;i<ts.length;i++){var parts=ts[i].split(SEP);
+for(var j=0;j<parts.length;j++){var p=(parts[j]||"").trim();
+if(!p||p.length<2||STOP[p])continue;if(seen[p])continue;seen[p]=1;out.push(p)}}
+return out}
 function matchCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",p2=c.id.indexOf("p2_")===0,ho=false;for(var k=0;k<ts.length;k++){if(!isMuni(ts[k])){ho=true;break}}for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);var hit=s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0;if(!hit){if(p2&&ho&&isMuni(t))continue;return false}}return true}
 q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=expandTerms(terms(v));var cards=document.querySelectorAll(".card");var n=0;
 if(!ts.length){cards.forEach(function(c){c.style.display=""});document.querySelectorAll(".sub").forEach(function(s){s.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=false});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";return}
@@ -590,7 +597,7 @@ if(d.classList.contains("none")){d.style.display="none";return}
 if(cityhit){d.style.display="";d.open=true;d.querySelectorAll(".card").forEach(function(c){if(c.style.display==="none"){c.style.display="";n++}})}
 else{var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}}});
 document.querySelectorAll(".lbl").forEach(function(l){l.style.display="none"});
-if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
+if(n===0){var ts2=relaxTerms(ts);if(ts2.length&&ts2.join("")!==ts.join("")){cards.forEach(function(c){var hit=matchCard(c,ts2);c.style.display=hit?"":"none";if(hit)n++});document.querySelectorAll(".sub").forEach(function(s){var vis=false,el=s.nextElementSibling;while(el&&!el.classList.contains("sub")){if(el.classList.contains("card")&&el.style.display!=="none"){vis=true;break}el=el.nextElementSibling}s.style.display=vis?"":"none"});document.querySelectorAll("details").forEach(function(d){if(d.classList.contains("none")){d.style.display="none";return}var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}});if(n>0){nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」ではヒットしなかったため、【"+ts2.join(" ")+"】で検索しました："+n+"件";}}}if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
 else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}if(window.__logSearch)window.__logSearch(v,n);});
 </script>
 <script>
