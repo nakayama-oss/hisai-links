@@ -863,7 +863,7 @@ if(n>0){det.style.display="";det.open=true;
 gres.style.display="";gres.innerHTML="🧭 "+sel.city[1]+"×「"+lbl+"」："+n+"件を下に表示中"
 +'<br><a href="javascript:void(0)" id=gp2>＋国・県の共通制度もさがす</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
 gcount("g/"+sel.city[1]+"/"+lbl);
-setTimeout(function(){det.scrollIntoView({behavior:"smooth",block:"start"})},80);}
+setTimeout(function(){gres.scrollIntoView({behavior:"smooth",block:"start"})},120);}
 else{var nl=det.querySelector(".nlist");var pending=false;
 if(nl){var t=nl.textContent||"";for(var i=0;i<sel.cat[1].length;i++){if(t.indexOf(sel.cat[1][i])>=0){pending=true;break}}}
 gres.style.display="";gres.innerHTML='<span class=g0>'+sel.city[1]+"では「"+lbl+"」の情報は"
