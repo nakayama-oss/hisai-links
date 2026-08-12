@@ -861,39 +861,42 @@ for(var i=0;i<sel.cat[1].length;i++){if(th===sel.cat[1][i]){c.style.display="";n
 det.querySelectorAll("details.none").forEach(function(d){d.style.display="none"});
 var lbl=sel.cat[0].replace(/^[^ ]+ /,"");
 if(n>0){det.style.display="";det.open=true;
-gres.style.display="";gres.innerHTML="🧭 "+sel.city[1]+"×「"+lbl+"」："+n+"件を下に表示中"
+var bh="🧭 "+sel.city[1]+"×「"+lbl+"」："+n+"件を下に表示中";
+gres.style.display="";gres.innerHTML=bh
 +'<br><a href="javascript:void(0)" id=gp2>＋国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
 gcount("g/"+sel.city[1]+"/"+lbl);
 setTimeout(function(){gres.scrollIntoView({block:"start"})},120);}
 else{var nl=det.querySelector(".nlist");var pending=false;
 if(nl){var t=nl.textContent||"";for(var i=0;i<sel.cat[1].length;i++){if(t.indexOf(sel.cat[1][i])>=0){pending=true;break}}}
-gres.style.display="";gres.innerHTML='<span class=g0>'+sel.city[1]+"では「"+lbl+"」の情報は"
-+(pending?"まだ公式ページの公開が確認できていません。今後追加される可能性があります。":"見つかりませんでした。")
-+'</span><br><a href="javascript:void(0)" id=gp2>国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gcity>この市町村の情報を全部見る</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
+var bh='<span class=g0>'+sel.city[1]+"では「"+lbl+"」の情報は"
++(pending?"まだ公式ページの公開が確認できていません。今後追加される可能性があります。":"見つかりませんでした。")+'</span>';
+gres.style.display="";gres.innerHTML=bh
++'<br><a href="javascript:void(0)" id=gp2>国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gcity>この市町村の情報を全部見る</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
 gcount("g0/"+sel.city[1]+"/"+lbl);}
 var p2=document.getElementById("gp2");if(p2)p2.onclick=function(){
 var L=(G.gp2||{})[sel.cat[0]];gcount("gp2/"+sel.city[1]+"/"+sel.cat[2]);
-if(L&&L.length){greset(false);
-var nl=0;for(var li=0;li<L.length;li++)if(L[li][1])nl++;
-var htm="🏛 国・県の共通制度："+nl+"件（タップで開く）";
+if(L&&L.length){
+var nl2=0;for(var li=0;li<L.length;li++)if(L[li][1])nl2++;
+var htm=bh+'<div style="border-top:1px solid #B7C6DE;margin:8px 0 6px"></div>'
++"🏛 国・県の共通制度："+nl2+"件（タップで開く。下の"+sel.city[1]+"の情報はそのまま表示中）";
 for(var li=0;li<L.length;li++){
 if(!L[li][1]){var st=L[li][0].charAt(0)==="※"?"font-weight:normal;font-size:11px;color:#444":"margin-top:4px";htm+='<br><span style="display:inline-block;'+st+'">'+L[li][0]+"</span>"}
 else{htm+='<br><a href="javascript:void(0)" data-gp2j="'+L[li][1]+'">'+L[li][0]+"</a>"}}
-htm+='<br><a href="javascript:void(0)" id=gback2>← 戻る</a>';
-gres.style.display="";gres.innerHTML=htm;
+htm+='<br><a href="javascript:void(0)" id=gback2>最初に戻る</a>';
+gres.innerHTML=htm;
 gres.querySelectorAll("[data-gp2j]").forEach(function(a){a.onclick=function(){
 var id=a.getAttribute("data-gp2j");var el=document.getElementById(id);if(!el)return;
-var gd=document.getElementById("gd");if(gd)gd.open=true;
-var p=el.closest("details");while(p){p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}
+el.style.display="";
+var p=el.closest("details");while(p){p.style.display="";p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}
 var bg=el.style.background;el.style.transition="background .4s";el.style.background="#FFF3B0";
 setTimeout(function(){el.scrollIntoView({block:"start"})},200);
-setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"start"})},550);
 setTimeout(function(){el.style.background=bg},3000);}});
 var b2=document.getElementById("gback2");if(b2)b2.onclick=function(){greset(true)};
-setTimeout(function(){gres.scrollIntoView({block:"center"})},150);}
+setTimeout(function(){gres.scrollIntoView({block:"start"})},120);}
 else{greset(false);q.value=sel.city[1]+" "+sel.cat[2];q.dispatchEvent(new Event("input"))}};
 var gb=document.getElementById("gback");if(gb)gb.onclick=function(){greset(true)};
 var gcy=document.getElementById("gcity");if(gcy)gcy.onclick=function(){greset(false);var s=document.getElementById("c_"+sel.city[0]);var d=document.getElementById("dc_"+sel.city[0]);if(d)d.open=true;if(s)setTimeout(function(){s.scrollIntoView({behavior:"smooth",block:"start"})},80)};}
+
 function greset(scrollTop){q.value="";q.dispatchEvent(new Event("input"));gres.style.display="none";
 if(scrollTop){var el=document.getElementById("pagetop");if(el)el.scrollIntoView({behavior:"smooth",block:"start"})}}
 q.addEventListener("input",function(){if(q.value.trim())gres.style.display="none"});
