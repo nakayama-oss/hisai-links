@@ -841,7 +841,7 @@ function mkCat(){gk.innerHTML="";gk.style.display="";gl2.textContent="② お困
 G.cats.forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){if(k[3]){mkSub(k)}else{sel.cat=k;grun()}};gk.appendChild(a)});}
 function mkSub(pk){gk.innerHTML="";gres.style.display="none";gl2.textContent="③ 住まいのどのご相談ですか？";
 var n=document.createElement("div");n.style.cssText="grid-column:1/-1;font-size:11.5px;font-weight:bold;color:#C00000;background:#FDECEC;border-radius:8px;padding:8px 10px;margin:0 0 4px";
-n.innerHTML="どの再建方法を選ぶかで使える制度が変わります。<b>応急修理と応急仮設住宅・公費解体は原則どちらか一方</b>です。申込み前に窓口へ相談を。";gk.appendChild(n);
+n.innerHTML="どの再建方法を選ぶかで使える制度が変わります。申込み前に弁護士会や各種窓口へご相談を。";gk.appendChild(n);
 pk[3].forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){sel.cat=k;grun()};gk.appendChild(a)});
 var ap=document.createElement("a");ap.className="kb";ap.href="https://sadahiro-law.com/card-navi/";ap.target="_blank";ap.rel="noopener";ap.textContent="🔍 使える制度を調べる（支援制度早見表アプリ・外部）";gk.appendChild(ap);
 var b=document.createElement("a");b.className="kb";b.href="javascript:void(0)";b.textContent="← 困りごとの一覧に戻る";b.onclick=function(){mkCat()};gk.appendChild(b);}
