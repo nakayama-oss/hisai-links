@@ -885,7 +885,8 @@ var bg=el.style.background;el.style.transition="background .4s";el.style.backgro
 setTimeout(function(){el.scrollIntoView({block:"start"})},200);
 setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"start"})},550);
 setTimeout(function(){el.style.background=bg},3000);}});
-var b2=document.getElementById("gback2");if(b2)b2.onclick=function(){greset(true)};}
+var b2=document.getElementById("gback2");if(b2)b2.onclick=function(){greset(true)};
+setTimeout(function(){gres.scrollIntoView({behavior:"smooth",block:"center"})},150);}
 else{greset(false);q.value=sel.city[1]+" "+sel.cat[2];q.dispatchEvent(new Event("input"))}};
 var gb=document.getElementById("gback");if(gb)gb.onclick=function(){greset(true)};
 var gcy=document.getElementById("gcity");if(gcy)gcy.onclick=function(){greset(false);var s=document.getElementById("c_"+sel.city[0]);var d=document.getElementById("dc_"+sel.city[0]);if(d)d.open=true;if(s)setTimeout(function(){s.scrollIntoView({behavior:"smooth",block:"start"})},80)};}
