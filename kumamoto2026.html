@@ -877,7 +877,14 @@ var htm="🏛 国・県の共通制度："+L.length+"件（タップで開く）
 for(var li=0;li<L.length;li++){htm+='<br><a href="javascript:void(0)" data-gp2j="'+L[li][1]+'">'+L[li][0]+"</a>"}
 htm+='<br><a href="javascript:void(0)" id=gback2>← 戻る</a>';
 gres.style.display="";gres.innerHTML=htm;
-gres.querySelectorAll("[data-gp2j]").forEach(function(a){a.onclick=function(){openTo(a.getAttribute("data-gp2j"))}});
+gres.querySelectorAll("[data-gp2j]").forEach(function(a){a.onclick=function(){
+var id=a.getAttribute("data-gp2j");var el=document.getElementById(id);if(!el)return;
+var gd=document.getElementById("gd");if(gd)gd.open=true;
+var p=el.closest("details");while(p){p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}
+var bg=el.style.background;el.style.transition="background .4s";el.style.background="#FFF3B0";
+setTimeout(function(){el.scrollIntoView({block:"start"})},200);
+setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"start"})},550);
+setTimeout(function(){el.style.background=bg},3000);}});
 var b2=document.getElementById("gback2");if(b2)b2.onclick=function(){greset(true)};}
 else{greset(false);q.value=sel.city[1]+" "+sel.cat[2];q.dispatchEvent(new Event("input"))}};
 var gb=document.getElementById("gback");if(gb)gb.onclick=function(){greset(true)};
