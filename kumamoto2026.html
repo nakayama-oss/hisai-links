@@ -839,7 +839,11 @@ function mkCity(){gc.innerHTML="";gc.style.display="";gl1.textContent="① お�
 var _shown=false;G.cities.forEach(function(c){if(c[3]===false&&!_shown){_shown=true;var h=document.createElement("div");h.className="gnote";h.style.cssText="grid-column:1/-1;font-size:11px;color:#555;font-weight:bold;margin:8px 2px 2px";h.textContent=G.grpnote||"";gc.appendChild(h);}var a=document.createElement("a");a.className="cb";a.href="javascript:void(0)";a.innerHTML=c[1]+(c[2]?"<br><small>震度7</small>":"");a.onclick=function(){sel.city=c;pickCity()};gc.appendChild(a)});}
 function pickCity(){gc.style.display="none";gl1.innerHTML='';var d=document.createElement("div");d.className="gsel";d.innerHTML='<span class=gchip>🏘 '+sel.city[1]+'</span><a class=gchg href="javascript:void(0)">変更</a>';d.querySelector(".gchg").onclick=function(){sel.city=null;sel.cat=null;greset(true);gl1.parentElement.querySelectorAll(".gsel").forEach(function(x){x.remove()});mkCity();gl2.style.display="none";gk.style.display="none"};gl1.parentElement.insertBefore(d,gl2);gl2.style.display="";mkCat();}
 function mkCat(){gk.innerHTML="";gk.style.display="";gl2.textContent="② お困りごとは？";
-G.cats.forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){if(k[3]){mkSub(k)}else{sel.cat=k;grun()}};gk.appendChild(a)});}
+G.cats.forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){if(k[3]){mkSub(k)}else{sel.cat=k;grun()}};gk.appendChild(a)});
+var av=document.createElement("a");av.className="kb";av.href="javascript:void(0)";av.style.background="#1F3864";av.style.color="#fff";
+av.textContent="📋 この市町村の情報を全部見る";
+av.onclick=function(){gcount("gall/"+(sel.city?sel.city[1]:""));greset(false);var sm=document.getElementById("c_"+sel.city[0]);var d=document.getElementById("dc_"+sel.city[0]);if(d)d.open=true;if(sm)setTimeout(function(){sm.scrollIntoView({block:"start"})},120)};
+gk.appendChild(av);}
 function mkSub(pk){gk.innerHTML="";gres.style.display="none";gl2.textContent="③ 住まいのどのご相談ですか？";
 var ntxt=(G.notice||{})[pk[0]];
 if(ntxt){var n=document.createElement("div");n.style.cssText="grid-column:1/-1;font-size:11.5px;font-weight:bold;color:#C00000;background:#FDECEC;border-radius:8px;padding:8px 10px;margin:0 0 4px";
