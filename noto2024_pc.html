@@ -778,6 +778,22 @@ document.addEventListener("click",function(e){var a=e.target.closest("a[data-j]"
 function allDetails(op){document.querySelectorAll("details.citysec").forEach(function(d){d.open=op})}
 function allP2(op){document.querySelectorAll("details.p2sec").forEach(function(d){d.open=op})}
 var q=document.getElementById("q"),info=document.getElementById("qinfo"),home=document.getElementById("home"),nores=document.getElementById("nores"),noresq=document.getElementById("noresq");
+/* 検索結果まで自動で移動する（2026-08-20 利用者決定）。
+   検索してもページが動かないため「検索できたのか分からない」という指摘への対応。
+   ・2文字以上入力して結果が出た最初の1回だけ、検索窓を画面上端へ寄せる（入力のたびには動かさない）
+   ・検索窓を空にすると再び有効になる
+   ・smooth は環境により全く動作しないため即時方式（2026-08-13の教訓） */
+var __qScrolled=false;
+function __scrollToSearchOnce(){
+ if(__qScrolled)return; if((q.value||"").trim().length<2)return; __qScrolled=true;
+ setTimeout(function(){
+  var y=q.getBoundingClientRect().top+(window.pageYOffset||document.documentElement.scrollTop||0)-8;
+  if(y<0)y=0;
+  window.scrollTo(0,y);
+  var cur=window.pageYOffset||document.documentElement.scrollTop||0;
+  if(Math.abs(cur-y)>4){document.documentElement.scrollTop=y;document.body.scrollTop=y}
+ },0);
+}
 function terms(v){return v.replace(/　/g," ").split(/\s+/).filter(function(t){return t})}
 function toHira(s){return s.replace(/[\u30a1-\u30f6]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-96)})}
 function matchAll2(s,y,ts){for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);if(s.indexOf(t)<0&&s.indexOf(h)<0&&(y||"").indexOf(h)<0)return false}return true}
@@ -814,7 +830,7 @@ for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);if(s.indexOf(t)>=0||s.index
 function matchCard(c,ts){var s=c.getAttribute("data-s")||"",y=c.getAttribute("data-y")||"",p2=c.id.indexOf("p2_")===0,ho=false;for(var k=0;k<ts.length;k++){if(!isMuni(ts[k])){ho=true;break}}for(var i=0;i<ts.length;i++){var t=ts[i],h=toHira(t);var hit=s.indexOf(t)>=0||s.indexOf(h)>=0||y.indexOf(h)>=0;if(!hit){if(p2&&ho&&isMuni(t))continue;return false}}return true}
 function refreshBands(tbl){var rows=tbl.querySelectorAll("tr.major,tr.sub,tr.cat,tr.card");var mS=false,sS=false,cS=false;for(var i=rows.length-1;i>=0;i--){var r=rows[i],cl=r.classList;if(cl.contains("card")){if(r.style.display!=="none"){mS=true;sS=true;cS=true;}}else if(cl.contains("sub")){r.style.display=sS?"":"none";sS=false;}else if(cl.contains("cat")){r.style.display=cS?"":"none";cS=false;}else if(cl.contains("major")){r.style.display=mS?"":"none";mS=false;sS=false;}}}
 q.addEventListener("input",function(){var v=q.value.trim().toLowerCase();var ts=expandTerms(terms(v));var cards=document.querySelectorAll("tr.card");var n=0;
-if(!ts.length){document.querySelectorAll("tr.card,tr.major,tr.sub,tr.cat,tr.hrow").forEach(function(x){x.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=d.classList.contains("p2sec")});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";return}
+if(!ts.length){document.querySelectorAll("tr.card,tr.major,tr.sub,tr.cat,tr.hrow").forEach(function(x){x.style.display=""});document.querySelectorAll("details").forEach(function(d){d.style.display="";d.open=d.classList.contains("p2sec")});document.querySelectorAll(".lbl").forEach(function(l){l.style.display=""});home.style.display="";info.style.display="none";nores.style.display="none";__qScrolled=false;return}
 home.style.display="none";
 cards.forEach(function(c){var hit=matchCard(c,ts);c.style.display=hit?"":"none";if(hit)n++});
 document.querySelectorAll("tr.hrow").forEach(function(h){h.style.display="none"});
@@ -825,6 +841,7 @@ else{var has=d.querySelector("tr.card:not([style*='none'])");if(has){d.style.dis
 document.querySelectorAll(".lbl").forEach(function(l){l.style.display="none"});
 if(n===0){var ts2=relaxTerms(ts,cards);if(ts2.length){var best=0;cards.forEach(function(c){var sc=scoreCard(c,ts2);if(sc>best)best=sc});if(best>0){cards.forEach(function(c){var hit=scoreCard(c,ts2)===best;c.style.display=hit?"":"none";if(hit)n++});document.querySelectorAll(".sub").forEach(function(s){var vis=false,el=s.nextElementSibling;while(el&&!el.classList.contains("sub")){if(el.classList.contains("card")&&el.style.display!=="none"){vis=true;break}el=el.nextElementSibling}s.style.display=vis?"":"none"});document.querySelectorAll("details").forEach(function(d){if(d.classList.contains("none")){d.style.display="none";return}var has=d.querySelector(".card:not([style*='none'])");if(has){d.style.display="";d.open=true}else{d.style.display="none"}});if(n>0){nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」では見つからなかったため、【"+ts2.slice(0,4).join(" ／ ")+"】で探しました："+n+"件";}}}}
 if(n===0){nores.style.display="";noresq.textContent=q.value.trim();info.style.display="none"}
-else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}});
+else{nores.style.display="none";info.style.display="";info.textContent="🔍「"+q.value.trim()+"」の検索結果："+n+"件（下に表示中）"}
+__scrollToSearchOnce();});
 </script>
 </div></body></html>
