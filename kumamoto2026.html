@@ -1490,9 +1490,10 @@ body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;margin:0;col
 <footer id=about><b>本サイトについて</b><br>本サイトは、被災者支援の相談対応に役立てるため弁護士が任意に作成した情報リンク集であり、<b>行政機関の公式サイトではありません</b>。各制度の内容・受付状況は、必ずリンク先の公式ページ・各自治体の窓口等でご確認ください。<br>本リンク集は作成時点の情報・制度に基づくもので、受けられる支援の全てを網羅するものではありません。受付終了・申請期限等は変わることがあります。掲載内容の正確性には努めていますが、その内容によって生じた損害について運営者は責任を負いかねます。<br>匿名の検索キーワードとボタン操作を、リンク集の改善（内部検索の精度向上・入口の最適化）のため記録しています（Cookie不使用・個人を特定しません）。<br>運営：弁護士 中山泰誠（兵庫県弁護士会所属）</footer>
 <a class=top data-j="pagetop" href="#pagetop">▲ 上へ</a>
 <script>window.MUNI=["あさぎり", "あさぎりまち", "あさぎり町", "あしきた", "あしきたまち", "あそ", "あそし", "あまくさ", "あまくさし", "あらお", "あらおし", "いつき", "いつきむら", "うえあまくさ", "うえあまくさし", "うき", "うきし", "うと", "うとし", "うぶやま", "うぶやまむら", "おおづ", "おおづまち", "おぐにまち", "かしま", "かしままち", "きくち", "きくちし", "きくよう", "きくようまち", "ぎょくとう", "ぎょくとうまち", "くま", "くまむら", "くまもと", "くまもとし", "こうさ", "こうさまち", "こうし", "こうしし", "さがら", "さがらむら", "しょうこく", "すいじょう", "すいじょうむら", "たかもり", "たかもりちょう", "たまな", "たまなし", "たらぎ", "たらぎまち", "つなぎ", "つなぎまち", "ながす", "ながすまち", "なごみ", "なごみまち", "なんかん", "なんかんまち", "にしき", "にしきちょう", "にしはら", "にしはらむら", "ひかわ", "ひかわまち", "ひとよし", "ひとよしし", "ましき", "ましきまち", "みさと", "みさとまち", "みなまた", "みなまたし", "みなみあそ", "みなみあそむら", "みなみおぐに", "みなみおぐにまち", "みふね", "みふねまち", "やつしろ", "やつしろし", "やまえ", "やまえむら", "やまが", "やまがし", "やまと", "やまとまち", "ゆのまえ", "ゆのまえまち", "れいほく", "れいほくまち", "上天草", "上天草市", "五木", "五木村", "人吉", "人吉市", "八代", "八代市", "南小国", "南小国町", "南関", "南関町", "南阿蘇", "南阿蘇村", "合志", "合志市", "和水", "和水町", "嘉島", "嘉島町", "多良木", "多良木町", "大津", "大津町", "天草", "天草市", "宇土", "宇土市", "宇城", "宇城市", "小国", "小国町", "山江", "山江村", "山都", "山都町", "山鹿", "山鹿市", "御船", "御船町", "水上", "水上村", "水俣", "水俣市", "氷川", "氷川町", "津奈木", "津奈木町", "湯前", "湯前町", "熊本", "熊本市", "玉名", "玉名市", "玉東", "玉東町", "球磨", "球磨村", "産山", "産山村", "甲佐", "甲佐町", "益城", "益城町", "相良", "相良村", "美里", "美里町", "芦北", "芦北町", "苓北", "苓北町", "荒尾", "荒尾市", "菊池", "菊池市", "菊陽", "菊陽町", "西原", "西原村", "錦", "錦町", "長洲", "長洲町", "阿蘇", "阿蘇市", "高森", "高森町"];</script>
+<script>var GCP="";</script>
 <script>
 function openTo(id){var el=document.getElementById(id);if(!el)return;var p=el.closest("details");while(p){p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}setTimeout(function(){el.scrollIntoView({behavior:"smooth",block:"start"})},60)}
-document.addEventListener("click",function(e){var a=e.target.closest("a[data-j]");if(a){e.preventDefault();var ev=a.getAttribute("data-ev");if(ev&&window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:ev,title:"btn",event:true});}openTo(a.getAttribute("data-j"))}});
+document.addEventListener("click",function(e){var a=e.target.closest("a[data-j]");if(a){e.preventDefault();var ev=a.getAttribute("data-ev");if(ev&&window.goatcounter&&window.goatcounter.count){window.goatcounter.count({path:GCP+ev,title:"btn",event:true});}openTo(a.getAttribute("data-j"))}});
 var q=document.getElementById("q"),info=document.getElementById("qinfo"),home=document.getElementById("home"),nores=document.getElementById("nores"),noresq=document.getElementById("noresq");
 /* 検索結果まで自動で移動する（2026-08-20 利用者決定）。
    検索してもページが動かないため「検索できたのか分からない」という指摘への対応。
@@ -1564,7 +1565,7 @@ __scrollToSearchOnce();if(window.__logSearch)window.__logSearch(v,n);});
 (function(){var qi=document.getElementById("q");if(!qi)return;var t=null;
 window.__logSearch=function(query,n){if(!query||query.length<2)return;if(t)clearTimeout(t);
 t=setTimeout(function(){if(query!==(qi.value.trim().toLowerCase()))return;if(!window.goatcounter||!window.goatcounter.count)return;var qq=query.slice(0,60);
-window.goatcounter.count({path:"q/"+qq,title:"search "+n,event:true});if(n===0){window.goatcounter.count({path:"q0/"+qq,title:"0hit",event:true});}},1500);};})();
+window.goatcounter.count({path:GCP+"q/"+qq,title:"search "+n,event:true});if(n===0){window.goatcounter.count({path:GCP+"q0/"+qq,title:"0hit",event:true});}},1500);};})();
 </script>
 <script>
 (function(){var G=window.GUIDE;if(!G)return;
