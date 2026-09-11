@@ -169,7 +169,7 @@ body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;margin:0;col
 <tr class="card" id="p2_A126" data-s="7 各省庁の情報発信（被害状況・支援制度等） （1）各省庁の情報発信 国税庁（災害関連情報） 税の減免・申告納付期限の延長等の災害関連情報。 税金 確定申告 雑損控除 期限経過 猶予 簡易課税" data-y="7 かくしょうちょうのじょうほうはっしん（ひがいじょうきょう・しえんせいどなど） （1）かくしょうちょうのじょうほうはっしん こくぜいちょう（さいがいかんれんじょうほう） ぜいのげんめん・しんこくのうふきげんのえんちょうなどのさいがいかんれんじょうほう。 ぜいきん かくていしんこく ざつそんこうじょ きげんけいか ゆうよ かんいかぜい"><td class=c-st></td><td class=c-nm><a class="nm ext" target=_blank rel=noopener href="https://www.nta.go.jp/taxes/shiraberu/saigai/index.htm">国税庁（災害関連情報）</a></td><td>税の減免・申告納付期限の延長等の災害関連情報。</td></tr>
 </tbody></table></details>
 <div class=lbl>被災自治体別（愛知県）　※災害救助法は名古屋市全域に適用（令和8年9月8日）<span class=btns><button onclick="allDetails(true)">すべて開く</button><button onclick="allDetails(false)">すべて閉じる</button></span></div>
-<div style="background:#FFF8E6;border:2px solid #C9971B;border-radius:11px;padding:11px 13px;margin:2px 0 10px;color:#6B4E06;font-size:12.5px;line-height:1.7">各市町村の欄は、毎日の点検で公式サイト等を確認して更新しています（2026年9月11日時点。各欄の「更新日」はリンク先ページの更新日です）。<b>「公開未確認のテーマ」は、その時点で市町村のサイトに案内が見当たらなかったという意味で、支援があるかどうかは不明です。</b>急ぎの場合は市町村の窓口に直接お問い合わせください。<br><b>り災証明の申請は、すぐに急ぐ必要はありません。</b>ただし<b>片付けや修理を始める前に、被害の写真を残してください。</b></div>
+<div style="background:#FFF8E6;border:2px solid #C9971B;border-radius:11px;padding:11px 13px;margin:2px 0 10px;color:#6B4E06;font-size:12.5px;line-height:1.7">各市町村の欄は、毎日の点検で公式サイト等を確認して更新しています（2026年9月12日時点。各欄の「更新日」はリンク先ページの更新日です）。<b>「公開未確認のテーマ」は、その時点で市町村のサイトに案内が見当たらなかったという意味で、支援があるかどうかは不明です。</b>急ぎの場合は市町村の窓口に直接お問い合わせください。<br><b>り災証明の申請は、すぐに急ぐ必要はありません。</b>ただし<b>片付けや修理を始める前に、被害の写真を残してください。</b></div>
 <details class=citysec id="dc_4"><summary id="c_4" data-y="なごやし【さいがいきゅうじょほう てきよう（れいわ8ねん9がつ8にち）】">名古屋市【災害救助法 適用（令和8年9月8日）】</summary>
 <table><tbody>
 <tr class=hrow><td class=c-th>テーマ大分類・テーマ</td><td class=c-nm>リンク名</td><td class=c-date>更新日</td><td>備考</td></tr>
@@ -330,10 +330,12 @@ window.goatcounter.count({path:GCP+"q/"+qq,title:"search "+n,event:true});if(n==
 var gc=document.getElementById("gc"),gk=document.getElementById("gk"),gl1=document.getElementById("gl1"),gl2=document.getElementById("gl2"),gres=document.getElementById("gres");
 var q=document.getElementById("q");var sel={city:null,cat:null};
 function gcount(p){if(window.goatcounter&&window.goatcounter.count)window.goatcounter.count({path:p,title:"guide",event:true});}
-function mkCity(){gc.innerHTML="";gc.style.display="";gl1.textContent="① お住まいの市町村は？";
+function single(){return G.cities&&G.cities.length===1}
+function mkCity(){if(single()){sel.city=G.cities[0];pickCity();return}
+gc.innerHTML="";gc.style.display="";gl1.textContent="① お住まいの市町村は？";
 var _shown=false;G.cities.forEach(function(c){if(c[3]===false&&!_shown){_shown=true;var h=document.createElement("div");h.className="gnote";h.style.cssText="grid-column:1/-1;font-size:11px;color:#555;font-weight:bold;margin:8px 2px 2px";h.textContent=G.grpnote||"";gc.appendChild(h);}var a=document.createElement("a");a.className="cb";a.href="javascript:void(0)";a.innerHTML=c[1]+(c[2]?"<br><small>震度7</small>":"");a.onclick=function(){sel.city=c;pickCity()};gc.appendChild(a)});}
-function pickCity(){gc.style.display="none";gl1.innerHTML='';var d=document.createElement("div");d.className="gsel";d.innerHTML='<span class=gchip>🏘 '+sel.city[1]+'</span><a class=gchg href="javascript:void(0)">変更</a>';d.querySelector(".gchg").onclick=function(){sel.city=null;sel.cat=null;greset(true);gl1.parentElement.querySelectorAll(".gsel").forEach(function(x){x.remove()});mkCity();gl2.style.display="none";gk.style.display="none"};gl1.parentElement.insertBefore(d,gl2);gl2.style.display="";mkCat();}
-function mkCat(){gk.innerHTML="";gk.style.display="";gl2.textContent="② お困りごとは？";
+function pickCity(){gc.style.display="none";gl1.innerHTML='';var d=document.createElement("div");d.className="gsel";d.innerHTML='<span class=gchip>🏘 '+sel.city[1]+'</span>'+(single()?"":'<a class=gchg href="javascript:void(0)">変更</a>');if(!single())d.querySelector(".gchg").onclick=function(){sel.city=null;sel.cat=null;greset(true);gl1.parentElement.querySelectorAll(".gsel").forEach(function(x){x.remove()});mkCity();gl2.style.display="none";gk.style.display="none"};gl1.parentElement.insertBefore(d,gl2);gl2.style.display="";mkCat();}
+function mkCat(){gk.innerHTML="";gk.style.display="";gl2.textContent=(single()?"① お困りごとは？":"② お困りごとは？");
 G.cats.forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){if(k[3]){mkSub(k)}else{sel.cat=k;grun()}};gk.appendChild(a)});
 var av=document.createElement("a");av.className="kb";av.href="javascript:void(0)";av.style.background="#1F3864";av.style.color="#fff";
 av.textContent="📋 この市町村の情報を全部見る";
@@ -346,6 +348,20 @@ n.innerHTML=ntxt;gk.appendChild(n);}
 pk[3].forEach(function(k){var a=document.createElement("a");a.className="kb";a.href="javascript:void(0)";a.textContent=k[0];a.onclick=function(){sel.cat=k;grun()};gk.appendChild(a)});
 var ap=document.createElement("a");ap.className="kb";ap.href="https://sadahiro-law.com/card-navi/";ap.target="_blank";ap.rel="noopener";ap.textContent="🔍 使える制度を調べる（支援制度診断アプリ・外部）";gk.appendChild(ap);
 var b=document.createElement("a");b.className="kb";b.href="javascript:void(0)";b.textContent="← 困りごとの一覧に戻る";b.onclick=function(){mkCat()};gk.appendChild(b);}
+function p2bind(){gres.querySelectorAll("[data-gp2j]").forEach(function(a){if(a._b)return;a._b=1;a.onclick=function(){
+var id=a.getAttribute("data-gp2j");var el=document.getElementById(id);if(!el)return;
+el.style.display="";
+var p=el.closest("details");while(p){p.style.display="";p.open=true;p=p.parentElement?p.parentElement.closest("details"):null}
+var bg=el.style.background;el.style.transition="background .4s";el.style.background="#FFF3B0";
+setTimeout(function(){el.scrollIntoView({block:"start"})},200);
+setTimeout(function(){el.style.background=bg},3000);}})}
+function p2block(){if(!single())return "";var L=(G.gp2||{})[sel.cat[0]];if(!L||!L.length)return "";
+var nl2=0;for(var li=0;li<L.length;li++)if(L[li][1])nl2++;
+var h='<div style="border-top:1px solid #B7C6DE;margin:8px 0 6px"></div>🏛 国・県の共通制度：'+nl2+"件（タップで開く）";
+for(var li=0;li<L.length;li++){
+if(!L[li][1]){var st=L[li][0].charAt(0)==="※"?"font-weight:normal;font-size:11px;color:#444":"margin-top:4px";h+='<br><span style="display:inline-block;'+st+'">'+L[li][0]+"</span>"}
+else{h+='<br><a href="javascript:void(0)" data-gp2j="'+L[li][1]+'">'+L[li][0]+"</a>"}}
+return h}
 function grun(){if(!sel.city||!sel.cat)return;
 var det=document.getElementById("dc_"+sel.city[0]);if(!det)return;
 q.value="";
@@ -363,15 +379,15 @@ var lbl=sel.cat[0].replace(/^[^ ]+ /,"");
 if(n>0){det.style.display="";det.open=true;det.querySelectorAll(".hrow").forEach(function(c){c.style.display=""});
 var bh="🧭 "+sel.city[1]+"×「"+lbl+"」："+n+"件を下に表示中";
 gres.style.display="";gres.innerHTML=bh
-+'<br><a href="javascript:void(0)" id=gp2>＋国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gsdn>⚖ 相談会・相談先をさがす</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
++'<br><a href="javascript:void(0)" id=gp2>＋国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gsdn>⚖ 相談会・相談先をさがす</a><a href="javascript:void(0)" id=gback>最初に戻る</a>'+p2block();
 gcount("g/"+sel.city[1]+"/"+lbl);
 setTimeout(function(){gres.scrollIntoView({block:"start"})},120);}
 else{var nl=det.querySelector(".nlist");var pending=false;
 if(nl){var t=nl.textContent||"";for(var i=0;i<sel.cat[1].length;i++){if(t.indexOf(sel.cat[1][i])>=0){pending=true;break}}}
 var bh='<span class=g0>'+sel.city[1]+"では「"+lbl+"」の情報は"
-+(pending?"まだ公式ページの公開が確認できていません。今後追加される可能性があります。":"見つかりませんでした。")+'</span>';
++(pending?"まだ公式ページの公開が確認できていません。今後追加される可能性があります。":"見つかりませんでした。")+'</span>'+(single()?'<br><span style="font-weight:normal;font-size:12px;color:#444">下の国・県の制度と、⚖ 相談会・相談先をご覧ください。</span>':"");
 gres.style.display="";gres.innerHTML=bh
-+'<br><a href="javascript:void(0)" id=gp2>国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gsdn>⚖ 相談会・相談先をさがす</a><a href="javascript:void(0)" id=gcity>この市町村の情報を全部見る</a><a href="javascript:void(0)" id=gback>最初に戻る</a>';
++'<br><a href="javascript:void(0)" id=gp2>国・県の共通制度・制度の説明をさがす</a><a href="javascript:void(0)" id=gsdn>⚖ 相談会・相談先をさがす</a><a href="javascript:void(0)" id=gcity>この市町村の情報を全部見る</a><a href="javascript:void(0)" id=gback>最初に戻る</a>'+p2block();
 gcount("g0/"+sel.city[1]+"/"+lbl);}
 var p2=document.getElementById("gp2");if(p2)p2.onclick=function(){
 var L=(G.gp2||{})[sel.cat[0]];gcount("gp2/"+sel.city[1]+"/"+sel.cat[2]);
@@ -422,7 +438,8 @@ else{gw.textContent="窓口の掲載はまだありません";gw.onclick=null;}}
 var b4=document.getElementById("gback4");if(b4)b4.onclick=function(){greset(true)};
 setTimeout(function(){gres.scrollIntoView({block:"start"})},120);};
 var gb=document.getElementById("gback");if(gb)gb.onclick=function(){greset(true)};
-var gcy=document.getElementById("gcity");if(gcy)gcy.onclick=function(){greset(false);var s=document.getElementById("c_"+sel.city[0]);var d=document.getElementById("dc_"+sel.city[0]);if(d)d.open=true;if(s)setTimeout(function(){s.scrollIntoView({behavior:"smooth",block:"start"})},80)};}
+var gcy=document.getElementById("gcity");if(gcy)gcy.onclick=function(){greset(false);var s=document.getElementById("c_"+sel.city[0]);var d=document.getElementById("dc_"+sel.city[0]);if(d)d.open=true;if(s)setTimeout(function(){s.scrollIntoView({behavior:"smooth",block:"start"})},80)};
+p2bind();}
 
 function greset(scrollTop){q.value="";q.dispatchEvent(new Event("input"));gres.style.display="none";
 if(scrollTop){var el=document.getElementById("pagetop");if(el)el.scrollIntoView({behavior:"smooth",block:"start"})}}
